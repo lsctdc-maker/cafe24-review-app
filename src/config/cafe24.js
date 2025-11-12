@@ -7,7 +7,7 @@ if (process.env.NODE_ENV !== 'production') {
 const config = {
   mallId: process.env.CAFE24_MALL_ID || 'webd02',
   clientId: process.env.CAFE24_CLIENT_ID || 'yUybC9QuHxTpvJ0D5ecewL',
-  clientSecret: process.env.CAFE24_CLIENT_SECRET || 'DLTChlVQEtisJEWWBR7KsgC',
+  clientSecret: process.env.CAFE24_CLIENT_SECRET || 'DLTChlVQEtisJEWWBR7KgC',
   redirectUri: process.env.CAFE24_REDIRECT_URI || 'https://cafe24reviewapp.vercel.app/auth/callback',
   apiVersion: process.env.CAFE24_API_VERSION || '2025-06-01',
 
