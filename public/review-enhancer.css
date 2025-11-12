@@ -1,0 +1,454 @@
+/**
+ * 카페24 리뷰 기능 향상 CSS
+ * 네이버 스마트스토어 스타일
+ */
+
+/* 전체 컨테이너 */
+.review-enhancer-statistics,
+.review-enhancer-controls,
+.review-enhancer-photo-gallery {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Malgun Gothic', sans-serif;
+  box-sizing: border-box;
+  margin-bottom: 30px;
+}
+
+/* ==================== 통계 섹션 ==================== */
+
+.review-enhancer-statistics {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 30px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.stats-overview {
+  display: flex;
+  gap: 50px;
+  align-items: stretch;
+  margin-bottom: 25px;
+  padding-bottom: 25px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+/* 전체 별점 */
+.overall-rating {
+  flex-shrink: 0;
+  text-align: center;
+  padding: 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 12px;
+  color: white;
+}
+
+.rating-number {
+  font-size: 56px;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 10px;
+}
+
+.rating-stars {
+  font-size: 24px;
+  margin-bottom: 8px;
+  letter-spacing: 2px;
+}
+
+.rating-stars .star {
+  color: #ffd700;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.total-reviews {
+  font-size: 14px;
+  opacity: 0.9;
+  font-weight: 500;
+}
+
+/* 별점 분포 */
+.rating-distribution {
+  flex: 1;
+  padding: 10px 0;
+}
+
+.distribution-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.distribution-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.star-label {
+  width: 35px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #666;
+  flex-shrink: 0;
+}
+
+.bar-container {
+  flex: 1;
+  height: 20px;
+  background: #f5f5f5;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+}
+
+.bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  border-radius: 10px;
+  transition: width 0.3s ease;
+}
+
+.bar-percentage {
+  width: 45px;
+  text-align: right;
+  font-size: 14px;
+  font-weight: 600;
+  color: #667eea;
+  flex-shrink: 0;
+}
+
+.bar-count {
+  width: 50px;
+  text-align: right;
+  font-size: 13px;
+  color: #999;
+  flex-shrink: 0;
+}
+
+/* 하이라이트 */
+.stats-highlights {
+  display: flex;
+  gap: 30px;
+}
+
+.highlight-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.highlight-label {
+  font-size: 13px;
+  color: #666;
+}
+
+.highlight-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: #333;
+}
+
+/* ==================== 컨트롤 섹션 ==================== */
+
+.review-enhancer-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background: #fafafa;
+  border-radius: 8px;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+/* 필터 버튼 */
+.filter-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  padding: 10px 20px;
+  border: 1px solid #ddd;
+  background: #fff;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.filter-btn:hover {
+  border-color: #667eea;
+  color: #667eea;
+}
+
+.filter-btn.active {
+  background: #667eea;
+  border-color: #667eea;
+  color: #fff;
+}
+
+/* 정렬 드롭다운 */
+.sort-dropdown {
+  position: relative;
+}
+
+.sort-select {
+  padding: 10px 35px 10px 15px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  background: #fff url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="8" viewBox="0 0 12 8"><path fill="%23666" d="M6 8L0 0h12z"/></svg>') no-repeat right 12px center;
+  background-size: 10px;
+  appearance: none;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.sort-select:hover,
+.sort-select:focus {
+  border-color: #667eea;
+  outline: none;
+}
+
+/* ==================== 포토 갤러리 ==================== */
+
+.review-enhancer-photo-gallery {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 25px;
+}
+
+.gallery-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.gallery-item {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.gallery-item:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.gallery-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+  padding: 8px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.gallery-item:hover .gallery-overlay {
+  opacity: 1;
+}
+
+.review-rating {
+  color: #ffd700;
+  font-size: 12px;
+  text-align: center;
+}
+
+.view-more-photos {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  background: #fff;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #667eea;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.view-more-photos:hover {
+  background: #f8f9ff;
+  border-color: #667eea;
+}
+
+/* ==================== 별점 스타일 ==================== */
+
+.star {
+  display: inline-block;
+}
+
+.star-full {
+  color: #ffd700;
+}
+
+.star-half {
+  color: #ffd700;
+  opacity: 0.5;
+}
+
+.star-empty {
+  color: #ddd;
+}
+
+/* ==================== 리뷰 하이라이트 애니메이션 ==================== */
+
+@keyframes highlight-pulse {
+  0%, 100% {
+    background-color: transparent;
+  }
+  50% {
+    background-color: #fff3cd;
+  }
+}
+
+.highlight-review {
+  animation: highlight-pulse 1s ease-in-out 2;
+}
+
+/* ==================== 반응형 ==================== */
+
+@media (max-width: 768px) {
+  .stats-overview {
+    flex-direction: column;
+    gap: 25px;
+  }
+
+  .overall-rating {
+    padding: 30px 20px;
+  }
+
+  .rating-number {
+    font-size: 48px;
+  }
+
+  .review-enhancer-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-buttons {
+    justify-content: center;
+  }
+
+  .sort-dropdown {
+    width: 100%;
+  }
+
+  .sort-select {
+    width: 100%;
+  }
+
+  .gallery-grid {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 8px;
+  }
+
+  .stats-highlights {
+    justify-content: space-around;
+  }
+}
+
+@media (max-width: 480px) {
+  .review-enhancer-statistics {
+    padding: 20px;
+  }
+
+  .rating-number {
+    font-size: 40px;
+  }
+
+  .rating-stars {
+    font-size: 20px;
+  }
+
+  .distribution-bar {
+    gap: 8px;
+  }
+
+  .star-label {
+    width: 30px;
+    font-size: 13px;
+  }
+
+  .bar-percentage {
+    width: 40px;
+    font-size: 13px;
+  }
+
+  .bar-count {
+    display: none; /* 모바일에서는 개수 숨김 */
+  }
+
+  .gallery-grid {
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  }
+
+  .filter-btn {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+}
+
+/* ==================== 로딩 상태 ==================== */
+
+.review-enhancer-loading {
+  text-align: center;
+  padding: 40px;
+  color: #999;
+}
+
+.review-enhancer-loading::after {
+  content: '...';
+  animation: dots 1.5s steps(4, end) infinite;
+}
+
+@keyframes dots {
+  0%, 20% {
+    content: '.';
+  }
+  40% {
+    content: '..';
+  }
+  60%, 100% {
+    content: '...';
+  }
+}
+
+/* ==================== 에러 상태 ==================== */
+
+.review-enhancer-error {
+  padding: 20px;
+  background: #fff3cd;
+  border: 1px solid #ffc107;
+  border-radius: 6px;
+  color: #856404;
+  font-size: 14px;
+}
