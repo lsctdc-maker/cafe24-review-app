@@ -37,6 +37,9 @@ class TokenManager {
     }
 
     try {
+      // Basic Authentication: base64(client_id:client_secret)
+      const credentials = Buffer.from(`${config.clientId}:${config.clientSecret}`).toString('base64');
+
       const response = await axios.post(
         `${config.oauthUrl()}/token`,
         new URLSearchParams({
@@ -44,7 +47,10 @@ class TokenManager {
           refresh_token: token.refresh_token
         }),
         {
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Authorization': `Basic ${credentials}`
+          }
         }
       );
 
@@ -59,17 +65,21 @@ class TokenManager {
 
   async exchangeCodeForToken(code) {
     try {
+      // Basic Authentication: base64(client_id:client_secret)
+      const credentials = Buffer.from(`${config.clientId}:${config.clientSecret}`).toString('base64');
+
       const response = await axios.post(
         `${config.oauthUrl()}/token`,
         new URLSearchParams({
           grant_type: 'authorization_code',
-          client_id: config.clientId,
-          client_secret: config.clientSecret,
           code: code,
           redirect_uri: config.redirectUri
         }),
         {
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Authorization': `Basic ${credentials}`
+          }
         }
       );
 
