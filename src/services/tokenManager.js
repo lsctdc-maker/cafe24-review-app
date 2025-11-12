@@ -37,17 +37,19 @@ class TokenManager {
     }
 
     try {
+      // Basic Authentication 헤더 생성
+      const credentials = Buffer.from(`${config.clientId}:${config.clientSecret}`).toString('base64');
+
       const response = await axios.post(
         `${config.oauthUrl()}/token`,
         new URLSearchParams({
           grant_type: 'refresh_token',
-          client_id: config.clientId,
-          client_secret: config.clientSecret,
           refresh_token: token.refresh_token
         }),
         {
           headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Authorization': `Basic ${credentials}`
           }
         }
       );
@@ -70,18 +72,21 @@ class TokenManager {
       console.log('  - Redirect URI:', config.redirectUri);
       console.log('  - OAuth URL:', config.oauthUrl());
 
+      // Basic Authentication 헤더 생성
+      const credentials = Buffer.from(`${config.clientId}:${config.clientSecret}`).toString('base64');
+      console.log('  - Auth header:', `Basic ${credentials.substring(0, 20)}...`);
+
       const response = await axios.post(
         `${config.oauthUrl()}/token`,
         new URLSearchParams({
           grant_type: 'authorization_code',
-          client_id: config.clientId,
-          client_secret: config.clientSecret,
           code: code,
           redirect_uri: config.redirectUri
         }),
         {
           headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Authorization': `Basic ${credentials}`
           }
         }
       );
