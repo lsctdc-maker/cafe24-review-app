@@ -1,6 +1,10 @@
-require('dotenv').config();
+// Vercel 환경에서는 process.env에 직접 주입됨
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
 
-module.exports = {
+// 환경 변수 로드 확인
+const config = {
   mallId: process.env.CAFE24_MALL_ID,
   clientId: process.env.CAFE24_CLIENT_ID,
   clientSecret: process.env.CAFE24_CLIENT_SECRET,
@@ -19,3 +23,13 @@ module.exports = {
     return `${this.baseUrl()}/oauth`;
   }
 };
+
+// 환경 변수 검증
+console.log('🔧 Config loaded:');
+console.log('  - NODE_ENV:', process.env.NODE_ENV);
+console.log('  - MALL_ID:', config.mallId || 'MISSING');
+console.log('  - CLIENT_ID:', config.clientId || 'MISSING');
+console.log('  - CLIENT_SECRET:', config.clientSecret ? `${config.clientSecret.substring(0, 5)}...` : 'MISSING');
+console.log('  - REDIRECT_URI:', config.redirectUri || 'MISSING');
+
+module.exports = config;
