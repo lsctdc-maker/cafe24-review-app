@@ -1,0 +1,48 @@
+# 환경 변수
+.env
+.env.local
+.env.*.local
+
+# 의존성
+node_modules/
+package-lock.json
+
+# 데이터베이스
+*.db
+*.sqlite
+*.sqlite3
+data/
+
+# 로그
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*.sublime-project
+*.sublime-workspace
+
+# 빌드
+dist/
+build/
+.next/
+out/
+
+# 임시 파일
+*.tmp
+*.temp
+.cache/
+
+# Vercel
+.vercel

@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>카페24 리뷰 앱 - 테스트</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .header {
+      background: white;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+      margin-bottom: 30px;
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 10px;
+      font-size: 32px;
+    }
+
+    .subtitle {
+      color: #666;
+      font-size: 16px;
+    }
+
+    .status {
+      background: #f5f5f5;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .status-indicator {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ccc;
+      animation: pulse 2s infinite;
+    }
+
+    .status-indicator.active {
+      background: #4CAF50;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .card {
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    }
+
+    .card h2 {
+      color: #333;
+      margin-bottom: 15px;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card p {
+      color: #666;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .button {
+      display: inline-block;
+      background: #667eea;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background 0.3s;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .button:hover {
+      background: #5568d3;
+    }
+
+    .button.success {
+      background: #4CAF50;
+    }
+
+    .button.success:hover {
+      background: #45a049;
+    }
+
+    .button.secondary {
+      background: #6c757d;
+    }
+
+    .button.secondary:hover {
+      background: #5a6268;
+    }
+
+    .result-box {
+      background: #f8f9fa;
+      border: 1px solid #dee2e6;
+      border-radius: 8px;
+      padding: 20px;
+      margin-top: 20px;
+      display: none;
+    }
+
+    .result-box.show {
+      display: block;
+    }
+
+    .result-box pre {
+      background: #282c34;
+      color: #abb2bf;
+      padding: 15px;
+      border-radius: 6px;
+      overflow-x: auto;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .icon {
+      font-size: 24px;
+    }
+
+    .footer {
+      text-align: center;
+      color: white;
+      margin-top: 40px;
+      opacity: 0.9;
+    }
+
+    .endpoints {
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .endpoint {
+      display: flex;
+      align-items: center;
+      padding: 12px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .endpoint:last-child {
+      border-bottom: none;
+    }
+
+    .method {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: bold;
+      margin-right: 12px;
+      min-width: 50px;
+      text-align: center;
+    }
+
+    .method.get {
+      background: #e3f2fd;
+      color: #1976d2;
+    }
+
+    .method.post {
+      background: #e8f5e9;
+      color: #388e3c;
+    }
+
+    .path {
+      font-family: 'Courier New', monospace;
+      color: #666;
+      flex: 1;
+    }
+
+    .loading {
+      display: inline-block;
+      margin-left: 10px;
+    }
+
+    .spinner {
+      border: 2px solid #f3f3f3;
+      border-top: 2px solid #667eea;
+      border-radius: 50%;
+      width: 16px;
+      height: 16px;
+      animation: spin 1s linear infinite;
+      display: inline-block;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- 헤더 -->
+    <div class="header">
+      <h1>🛍️ 카페24 리뷰 앱</h1>
+      <p class="subtitle">네이버 스마트스토어 스타일의 고급 리뷰 시스템</p>
+
+      <div class="status">
+        <div>
+          <strong>인증 상태:</strong>
+          <span id="auth-status">확인 중...</span>
+        </div>
+        <div class="status-indicator" id="status-indicator"></div>
+      </div>
+    </div>
+
+    <!-- 주요 기능 카드 -->
+    <div class="grid">
+      <!-- 인증 -->
+      <div class="card">
+        <h2><span class="icon">🔐</span> 1. 카페24 인증</h2>
+        <p>카페24 쇼핑몰과 연동하기 위해 먼저 인증이 필요합니다.</p>
+        <a href="/auth/start" class="button">인증 시작</a>
+        <button onclick="checkAuthStatus()" class="button secondary">상태 확인</button>
+        <div id="auth-result" class="result-box"></div>
+      </div>
+
+      <!-- API 테스트 -->
+      <div class="card">
+        <h2><span class="icon">🧪</span> 2. API 테스트</h2>
+        <p>카페24 API 연동이 정상적으로 작동하는지 확인합니다.</p>
+        <button onclick="testAPI()" class="button success">API 테스트</button>
+        <div id="test-result" class="result-box"></div>
+      </div>
+
+      <!-- 리뷰 조회 -->
+      <div class="card">
+        <h2><span class="icon">⭐</span> 3. 리뷰 조회</h2>
+        <p>전체 리뷰를 조회하고 정렬 기능을 테스트합니다.</p>
+        <button onclick="getReviews()" class="button">전체 리뷰 조회</button>
+        <div id="review-result" class="result-box"></div>
+      </div>
+    </div>
+
+    <!-- API 엔드포인트 목록 -->
+    <div class="endpoints">
+      <h2 style="margin-bottom: 20px;">📚 API 엔드포인트</h2>
+
+      <div class="endpoint">
+        <span class="method get">GET</span>
+        <span class="path">/auth/start</span>
+        <span>카페24 인증 시작</span>
+      </div>
+
+      <div class="endpoint">
+        <span class="method get">GET</span>
+        <span class="path">/auth/callback</span>
+        <span>OAuth 콜백</span>
+      </div>
+
+      <div class="endpoint">
+        <span class="method get">GET</span>
+        <span class="path">/auth/status</span>
+        <span>인증 상태 확인</span>
+      </div>
+
+      <div class="endpoint">
+        <span class="method get">GET</span>
+        <span class="path">/api/test</span>
+        <span>API 연동 테스트</span>
+      </div>
+
+      <div class="endpoint">
+        <span class="method get">GET</span>
+        <span class="path">/api/products</span>
+        <span>상품 목록 조회</span>
+      </div>
+
+      <div class="endpoint">
+        <span class="method get">GET</span>
+        <span class="path">/api/products/:id/reviews</span>
+        <span>상품별 리뷰 조회</span>
+      </div>
+
+      <div class="endpoint">
+        <span class="method get">GET</span>
+        <span class="path">/api/reviews</span>
+        <span>전체 리뷰 조회</span>
+      </div>
+
+      <div class="endpoint">
+        <span class="method post">POST</span>
+        <span class="path">/api/reviews</span>
+        <span>리뷰 생성</span>
+      </div>
+    </div>
+
+    <!-- 푸터 -->
+    <div class="footer">
+      <p>© 2025 카페24 리뷰 앱 | Powered by Node.js + Express</p>
+    </div>
+  </div>
+
+  <script>
+    // 페이지 로드 시 인증 상태 확인
+    window.addEventListener('load', () => {
+      checkAuthStatus();
+    });
+
+    // 인증 상태 확인
+    async function checkAuthStatus() {
+      try {
+        const response = await fetch('/auth/status');
+        const data = await response.json();
+
+        const statusEl = document.getElementById('auth-status');
+        const indicatorEl = document.getElementById('status-indicator');
+        const resultEl = document.getElementById('auth-result');
+
+        if (data.authenticated) {
+          statusEl.textContent = `✅ 인증됨 (${data.mall_id})`;
+          statusEl.style.color = '#4CAF50';
+          indicatorEl.classList.add('active');
+          resultEl.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+        } else {
+          statusEl.textContent = '❌ 인증 필요';
+          statusEl.style.color = '#f44336';
+          indicatorEl.classList.remove('active');
+          resultEl.innerHTML = `<p style="color: #f44336;">${data.message}</p>`;
+        }
+
+        resultEl.classList.add('show');
+      } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('auth-status').textContent = '⚠️ 에러';
+      }
+    }
+
+    // API 테스트
+    async function testAPI() {
+      const resultEl = document.getElementById('test-result');
+      resultEl.innerHTML = '<p>로딩 중... <span class="spinner"></span></p>';
+      resultEl.classList.add('show');
+
+      try {
+        const response = await fetch('/api/test');
+        const data = await response.json();
+
+        if (data.success) {
+          resultEl.innerHTML = `
+            <h3 style="color: #4CAF50; margin-bottom: 10px;">✅ API 연동 성공!</h3>
+            <pre>${JSON.stringify(data.data, null, 2)}</pre>
+          `;
+        } else {
+          resultEl.innerHTML = `
+            <h3 style="color: #f44336; margin-bottom: 10px;">❌ API 연동 실패</h3>
+            <p>${data.message}</p>
+            <pre>${JSON.stringify(data.error, null, 2)}</pre>
+          `;
+        }
+      } catch (error) {
+        resultEl.innerHTML = `
+          <h3 style="color: #f44336;">❌ 에러 발생</h3>
+          <p>${error.message}</p>
+          <p style="margin-top: 10px;">먼저 /auth/start에서 인증을 완료해주세요.</p>
+        `;
+      }
+    }
+
+    // 리뷰 조회
+    async function getReviews() {
+      const resultEl = document.getElementById('review-result');
+      resultEl.innerHTML = '<p>로딩 중... <span class="spinner"></span></p>';
+      resultEl.classList.add('show');
+
+      try {
+        const response = await fetch('/api/reviews?limit=10&sortBy=latest');
+        const data = await response.json();
+
+        if (data.success) {
+          resultEl.innerHTML = `
+            <h3 style="color: #4CAF50; margin-bottom: 10px;">✅ 리뷰 조회 성공!</h3>
+            <p><strong>총 리뷰 수:</strong> ${data.data.total}개</p>
+            <pre>${JSON.stringify(data.data, null, 2)}</pre>
+          `;
+        } else {
+          resultEl.innerHTML = `
+            <h3 style="color: #f44336; margin-bottom: 10px;">❌ 리뷰 조회 실패</h3>
+            <p>${data.message}</p>
+          `;
+        }
+      } catch (error) {
+        resultEl.innerHTML = `
+          <h3 style="color: #f44336;">❌ 에러 발생</h3>
+          <p>${error.message}</p>
+        `;
+      }
+    }
+  </script>
+</body>
+</html>
