@@ -37,56 +37,60 @@ class TokenManager {
     }
 
     try {
-      // Basic Authentication: base64(client_id:client_secret)
-      const credentials = Buffer.from(`${config.clientId}:${config.clientSecret}`).toString('base64');
-
       const response = await axios.post(
         `${config.oauthUrl()}/token`,
         new URLSearchParams({
           grant_type: 'refresh_token',
+          client_id: config.clientId,
+          client_secret: config.clientSecret,
           refresh_token: token.refresh_token
         }),
         {
           headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Authorization': `Basic ${credentials}`
+            'Content-Type': 'application/x-www-form-urlencoded'
           }
         }
       );
 
-      console.log('Token refreshed successfully');
+      console.log('✅ Token refreshed successfully');
       db.updateToken(response.data);
       return response.data;
     } catch (error) {
-      console.error('Failed to refresh token:', error.response?.data || error.message);
+      console.error('❌ Failed to refresh token:', error.response?.data || error.message);
       throw new Error('Token refresh failed. Please re-authenticate at /auth/start');
     }
   }
 
   async exchangeCodeForToken(code) {
     try {
-      // Basic Authentication: base64(client_id:client_secret)
-      const credentials = Buffer.from(`${config.clientId}:${config.clientSecret}`).toString('base64');
+      // Debug: 환경 변수 확인
+      console.log('🔍 Token exchange debug:');
+      console.log('  - Client ID:', config.clientId);
+      console.log('  - Client Secret:', config.clientSecret ? `${config.clientSecret.substring(0, 5)}...` : 'undefined');
+      console.log('  - Redirect URI:', config.redirectUri);
+      console.log('  - OAuth URL:', config.oauthUrl());
 
       const response = await axios.post(
         `${config.oauthUrl()}/token`,
         new URLSearchParams({
           grant_type: 'authorization_code',
+          client_id: config.clientId,
+          client_secret: config.clientSecret,
           code: code,
           redirect_uri: config.redirectUri
         }),
         {
           headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Authorization': `Basic ${credentials}`
+            'Content-Type': 'application/x-www-form-urlencoded'
           }
         }
       );
 
+      console.log('✅ Token exchange successful');
       await this.saveToken(response.data);
       return response.data;
     } catch (error) {
-      console.error('Failed to exchange code:', error.response?.data || error.message);
+      console.error('❌ Token exchange failed:', error.response?.data || error.message);
       throw new Error('Code exchange failed: ' + (error.response?.data?.error_description || error.message));
     }
   }
