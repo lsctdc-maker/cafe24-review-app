@@ -23,8 +23,12 @@
 OAuth Scope에 다음 권한이 **반드시** 필요합니다:
 
 ```
-mall.write_scripttag
+mall.read_design
+mall.write_design
 ```
+
+**중요**: ScriptTags API는 디자인/화면 관련 API이므로 `mall.write_design` 권한이 필요합니다.
+`mall.write_scripttag`라는 권한은 카페24 공식 문서에 존재하지 않습니다.
 
 ## 📡 API 엔드포인트
 

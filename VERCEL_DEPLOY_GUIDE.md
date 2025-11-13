@@ -129,10 +129,13 @@ mall.read_application
 mall.write_application
 mall.read_product
 mall.write_product
-mall.write_scripttag
+mall.read_design
+mall.write_design
 ```
 
-**중요**: `mall.write_scripttag` 권한은 ScriptTags API를 사용하여 스크립트를 자동으로 삽입하는 데 필요합니다. 이 권한이 있어야 앱 설치 시 자동으로 JavaScript/CSS 파일이 쇼핑몰에 삽입됩니다.
+**중요**: `mall.read_design`와 `mall.write_design` 권한은 ScriptTags API를 사용하여 스크립트를 자동으로 삽입하는 데 필요합니다. 이 권한이 있어야 앱 설치 시 자동으로 JavaScript/CSS 파일이 쇼핑몰에 삽입됩니다.
+
+**참고**: 과거 문서에 언급된 `mall.write_scripttag`는 카페24 공식 문서에 존재하지 않는 권한입니다. 올바른 권한은 `mall.write_design`입니다.
 
 ### 4. 관리자 페이지 URL 등록
 
@@ -229,7 +232,7 @@ git push origin main
 **원인**: ScriptTags API 호출 실패 또는 권한 부족
 
 **해결**:
-- `mall.write_scripttag` 권한이 카페24 개발자센터에 설정되어 있는지 확인
+- `mall.read_design`와 `mall.write_design` 권한이 카페24 개발자센터에 설정되어 있는지 확인
 - Vercel 로그에서 ScriptTag 생성 에러 확인
 - 브라우저 개발자 도구 Console 탭에서 스크립트 로딩 에러 확인
 - F12 → Network 탭에서 `review-enhancer.js` 파일이 로드되는지 확인

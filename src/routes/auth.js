@@ -19,9 +19,9 @@ router.get('/start', (req, res) => {
     response_type: 'code',
     client_id: config.clientId,
     redirect_uri: config.redirectUri,
-    // TEMPORARY FIX: mall.write_scripttag 제거 (카페24 개발자센터에서 승인되지 않은 권한)
-    // TODO: 카페24 개발자센터에서 mall.write_scripttag 권한 승인 후 다시 추가
-    scope: 'mall.read_product mall.write_product mall.read_application mall.write_application',
+    // 공식 문서 기준: ScriptTags API 사용을 위해 mall.read_design, mall.write_design 필요
+    // 참고: cafe24-Developers/화면 스크립트 적용.html
+    scope: 'mall.read_product mall.write_product mall.read_application mall.write_application mall.read_design mall.write_design',
     state: state
   });
 
