@@ -19,7 +19,9 @@ router.get('/start', (req, res) => {
     response_type: 'code',
     client_id: config.clientId,
     redirect_uri: config.redirectUri,
-    scope: 'mall.read_product mall.write_product mall.read_application mall.write_application mall.write_scripttag',
+    // TEMPORARY FIX: mall.write_scripttag 제거 (카페24 개발자센터에서 승인되지 않은 권한)
+    // TODO: 카페24 개발자센터에서 mall.write_scripttag 권한 승인 후 다시 추가
+    scope: 'mall.read_product mall.write_product mall.read_application mall.write_application',
     state: state
   });
 

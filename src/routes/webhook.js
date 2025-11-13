@@ -72,7 +72,15 @@ router.post('/install', async (req, res) => {
       });
 
     } catch (scriptError) {
-      console.error('⚠️ ScriptTag 삽입 실패 (설정은 저장됨):', scriptError);
+      console.error('❌ ScriptTag 삽입 실패 (상세 정보):', {
+        message: scriptError.message,
+        stack: scriptError.stack,
+        response: scriptError.response?.data,
+        status: scriptError.response?.status,
+        statusText: scriptError.response?.statusText,
+        mall_id,
+        note: '카페24 개발자센터에서 mall.write_scripttag 권한이 승인되었는지 확인 필요'
+      });
 
       // ScriptTag 실패해도 설정은 저장되었으므로 성공으로 처리
       res.json({
@@ -80,7 +88,11 @@ router.post('/install', async (req, res) => {
         message: '앱이 설치되었으나 스크립트 자동 삽입에 실패했습니다. 관리자 페이지를 확인하세요.',
         mall_id,
         auto_installation: false,
-        error: scriptError.message
+        error: scriptError.message,
+        debug: {
+          cafe24_response: scriptError.response?.data,
+          status_code: scriptError.response?.status
+        }
       });
     }
 
