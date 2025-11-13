@@ -19,7 +19,7 @@ router.get('/start', (req, res) => {
     response_type: 'code',
     client_id: config.clientId,
     redirect_uri: config.redirectUri,
-    scope: 'mall.read_product mall.write_product mall.read_application mall.write_application',
+    scope: 'mall.read_product mall.write_product mall.read_application mall.write_application mall.write_scripttag',
     state: state
   });
 

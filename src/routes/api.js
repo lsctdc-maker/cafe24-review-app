@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const cafe24Client = require('../services/cafe24Client');
 const reviewService = require('../services/reviewService');
+const database = require('../models/database');
 
 /**
  * API 테스트 (간단한 상품 조회)
@@ -235,6 +236,76 @@ router.get('/boards', async (req, res) => {
       data: boards
     });
   } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
+});
+
+/**
+ * 쇼핑몰 설정 조회
+ * GET /app/settings/:mallId
+ */
+router.get('/app/settings/:mallId', async (req, res) => {
+  try {
+    const { mallId } = req.params;
+
+    // 설정 조회 (없으면 기본값 반환)
+    const settings = database.getSetting(`settings:${mallId}`) || {
+      enableWidget: true,
+      showStatistics: true,
+      showPhotoGallery: true,
+      mainColor: '#667eea',
+      photoGalleryCount: 8
+    };
+
+    res.json(settings);
+  } catch (error) {
+    console.error('설정 조회 에러:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
+});
+
+/**
+ * 쇼핑몰 설정 저장
+ * POST /app/settings/:mallId
+ */
+router.post('/app/settings/:mallId', async (req, res) => {
+  try {
+    const { mallId } = req.params;
+    const settings = req.body;
+
+    // 설정 유효성 검사
+    const validatedSettings = {
+      enableWidget: settings.enableWidget !== undefined ? settings.enableWidget : true,
+      showStatistics: settings.showStatistics !== undefined ? settings.showStatistics : true,
+      showPhotoGallery: settings.showPhotoGallery !== undefined ? settings.showPhotoGallery : true,
+      mainColor: settings.mainColor || '#667eea',
+      photoGalleryCount: parseInt(settings.photoGalleryCount) || 8
+    };
+
+    // photoGalleryCount 범위 제한
+    if (validatedSettings.photoGalleryCount < 4) {
+      validatedSettings.photoGalleryCount = 4;
+    }
+    if (validatedSettings.photoGalleryCount > 20) {
+      validatedSettings.photoGalleryCount = 20;
+    }
+
+    // 설정 저장
+    database.setSetting(`settings:${mallId}`, validatedSettings);
+
+    res.json({
+      success: true,
+      message: '설정이 저장되었습니다.',
+      data: validatedSettings
+    });
+  } catch (error) {
+    console.error('설정 저장 에러:', error);
     res.status(500).json({
       success: false,
       message: error.message

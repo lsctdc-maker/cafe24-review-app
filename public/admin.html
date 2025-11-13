@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>리뷰 기능 향상 앱 - 설정</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Malgun Gothic', sans-serif;
+      background: #f5f5f5;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .header {
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .header h1 {
+      font-size: 24px;
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .header p {
+      color: #666;
+      font-size: 14px;
+    }
+
+    .section {
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid #f0f0f0;
+    }
+
+    .setting-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .setting-row:last-child {
+      border-bottom: none;
+    }
+
+    .setting-info {
+      flex: 1;
+    }
+
+    .setting-label {
+      font-size: 15px;
+      font-weight: 500;
+      color: #333;
+      margin-bottom: 5px;
+    }
+
+    .setting-description {
+      font-size: 13px;
+      color: #666;
+      line-height: 1.5;
+    }
+
+    .setting-control {
+      flex-shrink: 0;
+      margin-left: 20px;
+    }
+
+    /* 토글 스위치 */
+    .toggle {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 26px;
+    }
+
+    .toggle input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 34px;
+    }
+
+    .toggle-slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+
+    .toggle input:checked + .toggle-slider {
+      background-color: #667eea;
+    }
+
+    .toggle input:checked + .toggle-slider:before {
+      transform: translateX(24px);
+    }
+
+    /* 색상 선택기 */
+    .color-picker {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .color-input {
+      width: 60px;
+      height: 36px;
+      border: 2px solid #ddd;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .color-code {
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 14px;
+      font-family: monospace;
+      color: #666;
+      background: #f8f8f8;
+    }
+
+    /* 숫자 입력 */
+    .number-input {
+      width: 80px;
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    /* 버튼 */
+    .button-group {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      padding-top: 20px;
+    }
+
+    .btn {
+      padding: 12px 30px;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background: #667eea;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #5568d3;
+    }
+
+    .btn-secondary {
+      background: #f0f0f0;
+      color: #666;
+    }
+
+    .btn-secondary:hover {
+      background: #e0e0e0;
+    }
+
+    /* 알림 메시지 */
+    .alert {
+      padding: 15px 20px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      display: none;
+    }
+
+    .alert.success {
+      background: #d4edda;
+      border: 1px solid #c3e6cb;
+      color: #155724;
+    }
+
+    .alert.error {
+      background: #f8d7da;
+      border: 1px solid #f5c6cb;
+      color: #721c24;
+    }
+
+    .alert.show {
+      display: block;
+    }
+
+    /* 로딩 스피너 */
+    .loading {
+      display: none;
+      text-align: center;
+      padding: 40px;
+    }
+
+    .loading.show {
+      display: block;
+    }
+
+    .spinner {
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #667eea;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 15px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* 미리보기 섹션 */
+    .preview-section {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 40px;
+      border-radius: 8px;
+      color: white;
+      text-align: center;
+    }
+
+    .preview-section h3 {
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+
+    .preview-section p {
+      opacity: 0.9;
+      margin-bottom: 20px;
+    }
+
+    .preview-section .btn {
+      background: white;
+      color: #667eea;
+    }
+
+    .preview-section .btn:hover {
+      background: #f0f0f0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- 헤더 -->
+    <div class="header">
+      <h1>리뷰 기능 향상 앱</h1>
+      <p>카페24 쇼핑몰의 리뷰 시스템을 네이버 스마트스토어 스타일로 업그레이드합니다.</p>
+    </div>
+
+    <!-- 알림 메시지 -->
+    <div id="alert" class="alert"></div>
+
+    <!-- 로딩 -->
+    <div id="loading" class="loading">
+      <div class="spinner"></div>
+      <p>설정을 불러오는 중...</p>
+    </div>
+
+    <!-- 기본 설정 -->
+    <div class="section">
+      <h2 class="section-title">기본 설정</h2>
+
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-label">리뷰 기능 향상 사용</div>
+          <div class="setting-description">
+            네이버 스타일의 고급 리뷰 기능을 활성화합니다.<br>
+            비활성화하면 카페24 기본 리뷰만 표시됩니다.
+          </div>
+        </div>
+        <div class="setting-control">
+          <label class="toggle">
+            <input type="checkbox" id="enableWidget" checked>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-label">리뷰 통계 표시</div>
+          <div class="setting-description">
+            평균 별점, 별점 분포, 포토 리뷰 수 등의 통계를 표시합니다.
+          </div>
+        </div>
+        <div class="setting-control">
+          <label class="toggle">
+            <input type="checkbox" id="showStatistics" checked>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-label">포토 리뷰 갤러리 표시</div>
+          <div class="setting-description">
+            포토 리뷰 썸네일을 모아서 갤러리 형태로 표시합니다.
+          </div>
+        </div>
+        <div class="setting-control">
+          <label class="toggle">
+            <input type="checkbox" id="showPhotoGallery" checked>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- 디자인 설정 -->
+    <div class="section">
+      <h2 class="section-title">디자인 설정</h2>
+
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-label">메인 색상</div>
+          <div class="setting-description">
+            버튼, 강조 텍스트 등에 사용될 메인 색상을 선택하세요.
+          </div>
+        </div>
+        <div class="setting-control">
+          <div class="color-picker">
+            <input type="color" id="mainColor" class="color-input" value="#667eea">
+            <span id="mainColorCode" class="color-code">#667eea</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-label">포토 갤러리 개수</div>
+          <div class="setting-description">
+            포토 갤러리에 표시할 최대 사진 개수를 설정합니다.
+          </div>
+        </div>
+        <div class="setting-control">
+          <input type="number" id="photoGalleryCount" class="number-input" value="8" min="4" max="20">
+        </div>
+      </div>
+    </div>
+
+    <!-- 설치 상태 -->
+    <div class="section">
+      <h2 class="section-title">✅ 설치 완료</h2>
+      <div style="background: #d4edda; padding: 20px; border-radius: 6px; border-left: 4px solid #28a745;">
+        <strong style="color: #155724; font-size: 16px;">앱이 자동으로 설치되었습니다!</strong>
+        <p style="color: #155724; margin-top: 12px; font-size: 14px; line-height: 1.8;">
+          카페24 ScriptTags API를 통해 스크립트가 자동으로 상품 상세 페이지에 삽입되었습니다.<br>
+          상품 상세 페이지에 접속하여 리뷰 위젯이 정상적으로 표시되는지 확인하세요.
+        </p>
+        <div style="margin-top: 15px; padding: 12px; background: #fff; border-radius: 4px; border: 1px solid #c3e6cb;">
+          <strong style="color: #155724; font-size: 13px;">📌 확인 사항</strong>
+          <ul style="margin: 8px 0 0 20px; color: #155724; font-size: 13px; line-height: 1.6;">
+            <li>리뷰가 있는 상품의 상세 페이지로 이동</li>
+            <li>리뷰 섹션에 통계, 필터, 갤러리가 표시되는지 확인</li>
+            <li>위젯이 표시되지 않으면 브라우저 캐시 삭제 후 새로고침 (Ctrl + F5)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 미리보기 -->
+    <div class="section preview-section">
+      <h3>✨ 설정을 적용하시겠습니까?</h3>
+      <p>변경사항을 저장하면 쇼핑몰에 즉시 반영됩니다.</p>
+      <button class="btn" onclick="previewChanges()">미리보기</button>
+    </div>
+
+    <!-- 저장 버튼 -->
+    <div class="button-group">
+      <button class="btn btn-secondary" onclick="resetSettings()">초기화</button>
+      <button class="btn btn-primary" onclick="saveSettings()">저장하기</button>
+    </div>
+  </div>
+
+  <script>
+    // 쇼핑몰 ID (URL에서 추출)
+    const mallId = new URLSearchParams(window.location.search).get('mall_id') || 'webd02';
+    const apiBaseUrl = 'https://cafe24reviewapp.vercel.app';
+
+    // 페이지 로드 시 설정 불러오기
+    window.addEventListener('DOMContentLoaded', loadSettings);
+
+    // 색상 선택 시 코드 업데이트
+    document.getElementById('mainColor').addEventListener('input', (e) => {
+      document.getElementById('mainColorCode').textContent = e.target.value;
+    });
+
+    /**
+     * 설정 불러오기
+     */
+    async function loadSettings() {
+      showLoading(true);
+
+      try {
+        const response = await fetch(`${apiBaseUrl}/app/settings/${mallId}`);
+
+        if (!response.ok) {
+          throw new Error('설정을 불러올 수 없습니다');
+        }
+
+        const settings = await response.json();
+
+        // 폼에 설정 적용
+        document.getElementById('enableWidget').checked = settings.enableWidget !== false;
+        document.getElementById('showStatistics').checked = settings.showStatistics !== false;
+        document.getElementById('showPhotoGallery').checked = settings.showPhotoGallery !== false;
+        document.getElementById('mainColor').value = settings.mainColor || '#667eea';
+        document.getElementById('mainColorCode').textContent = settings.mainColor || '#667eea';
+        document.getElementById('photoGalleryCount').value = settings.photoGalleryCount || 8;
+
+        showLoading(false);
+      } catch (error) {
+        console.error('설정 로드 에러:', error);
+        showLoading(false);
+        // 에러 시 기본값 사용
+      }
+    }
+
+    /**
+     * 설정 저장
+     */
+    async function saveSettings() {
+      const settings = {
+        enableWidget: document.getElementById('enableWidget').checked,
+        showStatistics: document.getElementById('showStatistics').checked,
+        showPhotoGallery: document.getElementById('showPhotoGallery').checked,
+        mainColor: document.getElementById('mainColor').value,
+        photoGalleryCount: parseInt(document.getElementById('photoGalleryCount').value)
+      };
+
+      showLoading(true);
+
+      try {
+        const response = await fetch(`${apiBaseUrl}/app/settings/${mallId}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(settings)
+        });
+
+        if (!response.ok) {
+          throw new Error('설정 저장 실패');
+        }
+
+        showLoading(false);
+        showAlert('설정이 저장되었습니다!', 'success');
+
+      } catch (error) {
+        console.error('설정 저장 에러:', error);
+        showLoading(false);
+        showAlert('설정 저장에 실패했습니다. 다시 시도해주세요.', 'error');
+      }
+    }
+
+    /**
+     * 초기화
+     */
+    function resetSettings() {
+      if (confirm('설정을 초기화하시겠습니까?')) {
+        document.getElementById('enableWidget').checked = true;
+        document.getElementById('showStatistics').checked = true;
+        document.getElementById('showPhotoGallery').checked = true;
+        document.getElementById('mainColor').value = '#667eea';
+        document.getElementById('mainColorCode').textContent = '#667eea';
+        document.getElementById('photoGalleryCount').value = 8;
+
+        showAlert('설정이 초기화되었습니다. 저장하기 버튼을 눌러 적용하세요.', 'success');
+      }
+    }
+
+    /**
+     * 미리보기
+     */
+    function previewChanges() {
+      // 쇼핑몰 상품 페이지 새 탭으로 열기
+      const mallUrl = `https://${mallId}.cafe24.com`;
+      window.open(mallUrl, '_blank');
+    }
+
+    /**
+     * 로딩 표시
+     */
+    function showLoading(show) {
+      document.getElementById('loading').classList.toggle('show', show);
+    }
+
+    /**
+     * 알림 메시지 표시
+     */
+    function showAlert(message, type) {
+      const alert = document.getElementById('alert');
+      alert.textContent = message;
+      alert.className = `alert ${type} show`;
+
+      setTimeout(() => {
+        alert.classList.remove('show');
+      }, 3000);
+    }
+  </script>
+</body>
+</html>

@@ -1,13 +1,26 @@
 require('dotenv').config();
 const express = require('express');
+const cors = require('cors');
 const path = require('path');
 const authRoutes = require('./routes/auth');
 const apiRoutes = require('./routes/api');
+const webhookRoutes = require('./routes/webhook');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // ==================== 미들웨어 ====================
+// CORS 설정 - 카페24 쇼핑몰에서 API 호출 허용
+app.use(cors({
+  origin: [
+    /\.cafe24\.com$/,  // 모든 cafe24.com 서브도메인 허용
+    'http://localhost:3000',  // 개발 환경
+    'https://cafe24reviewapp.vercel.app'  // Vercel 배포 환경
+  ],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
+}));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '../public')));
@@ -15,6 +28,7 @@ app.use(express.static(path.join(__dirname, '../public')));
 // ==================== 라우트 ====================
 app.use('/auth', authRoutes);
 app.use('/api', apiRoutes);
+app.use('/webhook', webhookRoutes);
 
 // ==================== 메인 페이지 ====================
 app.get('/', (req, res) => {
@@ -60,14 +74,19 @@ app.listen(PORT, () => {
   console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
   console.log('');
   console.log('📖 사용 가능한 엔드포인트:');
-  console.log(`   ├─ GET  /                      메인 페이지`);
-  console.log(`   ├─ GET  /auth/start            카페24 인증 시작`);
-  console.log(`   ├─ GET  /auth/callback         OAuth 콜백`);
-  console.log(`   ├─ GET  /auth/status           인증 상태 확인`);
-  console.log(`   ├─ GET  /api/test              API 테스트`);
-  console.log(`   ├─ GET  /api/products          상품 목록`);
-  console.log(`   ├─ GET  /api/reviews           전체 리뷰`);
-  console.log(`   └─ GET  /api/products/:id/reviews  상품별 리뷰`);
+  console.log(`   ├─ GET  /                          메인 페이지`);
+  console.log(`   ├─ GET  /auth/start                카페24 인증 시작`);
+  console.log(`   ├─ GET  /auth/callback             OAuth 콜백`);
+  console.log(`   ├─ GET  /auth/status               인증 상태 확인`);
+  console.log(`   ├─ GET  /api/test                  API 테스트`);
+  console.log(`   ├─ GET  /api/products              상품 목록`);
+  console.log(`   ├─ GET  /api/reviews               전체 리뷰`);
+  console.log(`   ├─ GET  /api/products/:id/reviews  상품별 리뷰`);
+  console.log(`   ├─ GET  /app/settings/:mallId      쇼핑몰 설정 조회`);
+  console.log(`   ├─ POST /app/settings/:mallId      쇼핑몰 설정 저장`);
+  console.log(`   ├─ POST /webhook/install           앱 설치 웹훅`);
+  console.log(`   ├─ POST /webhook/uninstall         앱 제거 웹훅`);
+  console.log(`   └─ POST /webhook/update            앱 업데이트 웹훅`);
   console.log('');
   console.log('💡 시작하려면 http://localhost:${PORT} 를 브라우저에서 열어주세요!');
   console.log('');
