@@ -60,7 +60,7 @@
     async loadReviews() {
       try {
         const response = await fetch(
-          `${this.config.apiBaseUrl}/products/${this.config.productNo}/reviews?sort=${this.current Sort}`
+          `${this.config.apiBaseUrl}/products/${this.config.productNo}/reviews?sort=${this.currentSort}`
         );
 
         if (!response.ok) {

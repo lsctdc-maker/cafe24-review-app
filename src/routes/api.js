@@ -279,6 +279,23 @@ router.post('/app/settings/:mallId', async (req, res) => {
     const { mallId } = req.params;
     const settings = req.body;
 
+    console.log('📥 설정 저장 요청 수신:', {
+      mallId,
+      settings,
+      headers: req.headers,
+      body: req.body
+    });
+
+    // 요청 바디 검증
+    if (!settings || typeof settings !== 'object') {
+      console.error('❌ 잘못된 요청 바디:', settings);
+      return res.status(400).json({
+        success: false,
+        message: '잘못된 요청입니다. 설정 데이터가 필요합니다.',
+        received: typeof settings
+      });
+    }
+
     // 설정 유효성 검사
     const validatedSettings = {
       enableWidget: settings.enableWidget !== undefined ? settings.enableWidget : true,
@@ -298,6 +315,7 @@ router.post('/app/settings/:mallId', async (req, res) => {
 
     // 설정 저장
     database.setSetting(`settings:${mallId}`, validatedSettings);
+    console.log('✅ 설정 저장 성공:', { mallId, validatedSettings });
 
     res.json({
       success: true,
@@ -305,10 +323,15 @@ router.post('/app/settings/:mallId', async (req, res) => {
       data: validatedSettings
     });
   } catch (error) {
-    console.error('설정 저장 에러:', error);
+    console.error('❌ 설정 저장 에러 (상세):', {
+      message: error.message,
+      stack: error.stack,
+      name: error.name
+    });
     res.status(500).json({
       success: false,
-      message: error.message
+      message: `서버 오류: ${error.message}`,
+      error: error.name
     });
   }
 });
