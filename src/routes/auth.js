@@ -19,9 +19,10 @@ router.get('/start', (req, res) => {
     response_type: 'code',
     client_id: config.clientId,
     redirect_uri: config.redirectUri,
-    // 공식 문서 기준: ScriptTags API 사용을 위해 mall.read_design, mall.write_design 필요
-    // 참고: cafe24-Developers/화면 스크립트 적용.html
-    scope: 'mall.read_product mall.write_product mall.read_application mall.write_application mall.read_design mall.write_design',
+    // 공식 문서 기준: ScriptTags API는 Store(상점) 카테고리에 속함
+    // 필요 권한: mall.read_store, mall.write_store
+    // 참고: cafe24-Developers/Scope별 사용동의.html + ScriptTags API 문서
+    scope: 'mall.read_product mall.write_product mall.read_application mall.write_application mall.read_store mall.write_store',
     state: state
   });
 
